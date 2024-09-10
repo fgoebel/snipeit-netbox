@@ -52,11 +52,12 @@ class Snipe:
         for page in self.__get_paged_items(session, "hardware", pagesize=200):
             print("Page {}".format(len(page['rows'])))
             for asset in page['rows']:
-                if Snipe.__custom_fields_has_mac_type(asset['custom_fields']):
-                    if asset not in assets:
-                        for att in ['name', 'notes']:
-                            if asset[att]: asset[att] = replace_entities(asset[att])
-                        assets.append(asset)
+                if isinstance(asset['custom_fields'],dict):
+                    if Snipe.__custom_fields_has_mac_type(asset['custom_fields']):
+                        if asset not in assets:
+                            for att in ['name', 'notes']:
+                                if asset[att]: asset[att] = replace_entities(asset[att])
+                            assets.append(asset)
 
         #assets = sorted(assets, key=lambda d: d['asset_tag'])
         return assets
